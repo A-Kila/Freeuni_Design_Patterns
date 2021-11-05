@@ -1,37 +1,39 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
-from endGameMessage import consoleLogger
+from consoleLogger import ConsoleLogger
+from evolution import EvolutionManager
 from interfaces import ICreature, IMovement
-from movement import Crawl, MovementManager
+from movement import Crawl
 
 
 @dataclass
 class Creature:
-    message: consoleLogger
+    logger: ConsoleLogger
     position: int
     power: int = 1
     health: int = 100
     stamina: int = 100
-    movement: IMovement = field(init=False)
+    movement: IMovement = Crawl()
+    evolutionManager: EvolutionManager = EvolutionManager()
 
     def __post_init__(self) -> None:
-        self.movement = Crawl(MovementManager(self))
+        self.logger.logStats(self.position, self.power, self.health, self.stamina)
 
     def move(self) -> None:
-        movementStats: tuple[int, int] = self.movement.move()
+        movementStats: tuple[int, int] = self.movement.move(self.stamina)
         self.position += movementStats[0]
         self.stamina -= movementStats[1]
 
     def attack(self, other: ICreature) -> None:
-        pass
+        if self.health <= 0:
+            return
 
-    def evolve(self) -> None:
-        pass
+        other.health -= self.power
+        if other.health <= 0:
+            self.printWonMessage()
 
-    def logStats(self) -> None:
-        print(
-            self.message.logStats(self.position, self.power, self.health, self.stamina)
-        )
+    def evolve(self, maxEvolutions: int) -> None:
+        self.evolutionManager.evolve(self, self.logger, maxEvolutions)
 
     def printWonMessage(self) -> None:
-        print(self.message.getWinMessage())
+        self.logger.printWinMessage()

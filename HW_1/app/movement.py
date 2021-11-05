@@ -1,72 +1,56 @@
-from dataclasses import dataclass, field
-
-from interfaces import ICreature, IMovement
+from interfaces import IMovement
 
 
-@dataclass
-class MovementManager:
-    creature: ICreature
-    speed: int = 0
-    stamina: int = 0
+class Crawl:
+    speed: int = 1
+    stamina: int = 1
     staminaRequired: int = 0
 
-    def move(self) -> tuple[int, int]:
-        pass
+    def move(self, staminaAvailable: int) -> tuple[int, int]:
+        if staminaAvailable <= 0:
+            return (0, 0)
+
+        return (self.speed, self.stamina)
 
 
-@dataclass
+# BaseMovementDecorator chooses the fastest available option from all the used decorators
 class BaseMovementDecorator:
     movement: IMovement
     speed: int
     stamina: int
     staminaRequired: int
-    creature: ICreature = field(init=False)
 
-    def __post_init__(self) -> None:
-        self.creature = self.movement.creature
+    def __init__(self, movement: IMovement) -> None:
+        self.movement = movement
 
-    def move(self) -> tuple[int, int]:
-        superStats: tuple[int, int] = self.movement.move()
+    def move(self, staminaAvailable: int) -> tuple[int, int]:
+        superStats: tuple[int, int] = self.movement.move(staminaAvailable)
 
-        if self.creature.stamina < self.staminaRequired or superStats[1] > self.speed:
+        if staminaAvailable < self.staminaRequired or superStats[0] > self.speed:
             return superStats
 
         return (self.speed, self.stamina)
 
 
-@dataclass
-class Crawl(BaseMovementDecorator):
-    speed: int = 1
-    stamina: int = 1
-    staminaRequired: int = 0
-
-    def move(self) -> tuple[int, int]:
-        return (self.speed, self.stamina)
-
-
-@dataclass
-class Hop(BaseMovementDecorator):
+class HopDecorator(BaseMovementDecorator):
     speed: int = 3
     stamina: int = 2
     staminaRequired: int = 20
 
 
-@dataclass
-class Walk(BaseMovementDecorator):
+class WalkDecorator(BaseMovementDecorator):
     speed: int = 4
     stamina: int = 2
     staminaRequired: int = 40
 
 
-@dataclass
-class Run(BaseMovementDecorator):
+class RunDecorator(BaseMovementDecorator):
     speed: int = 6
     stamina: int = 4
     staminaRequired: int = 60
 
 
-@dataclass
-class Fly(BaseMovementDecorator):
+class FlyDecorator(BaseMovementDecorator):
     speed: int = 8
     stamina: int = 4
     staminaRequired: int = 80
