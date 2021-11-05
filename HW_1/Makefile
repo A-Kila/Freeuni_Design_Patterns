@@ -14,5 +14,5 @@ fmt format: ## Run code formatters
 lint: ## Run code linters
 	isort --check app tests
 	black --check app tests
-	flake8 app tests
-	mypy app tests
+	flake8 app #tests
+	mypy app #tests
