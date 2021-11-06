@@ -106,12 +106,10 @@ class EvolutionManager:
     )
 
     def __getRandomEvolution(self) -> IEvolution:
-
         return self.__evolutions[randrange(0, len(self.__evolutions))]
 
     def __getRandomEvolutions(self, maxEvolutions: int) -> list[IEvolution]:
         result: list[IEvolution] = list()
-
         for _ in range(randrange(0, maxEvolutions)):
             result.append(self.__getRandomEvolution())
 
@@ -123,10 +121,8 @@ class EvolutionManager:
     def addEvolution(self, evolution: IEvolution) -> None:
         self.__evolutions.append(evolution)
 
-    def evolve(
-        self, creature: ICreature, logger: ConsoleLogger, maxEvolution: int
-    ) -> None:
-        for bodyPart in self.__getRandomEvolutions(maxEvolution):
+    def evolve(self, creature: ICreature, logger: ConsoleLogger, maxEvol: int) -> None:
+        for bodyPart in self.__getRandomEvolutions(maxEvol):
             bodyPart.evolve(creature)
 
         EvolutionAdapter(logger).logEvolutions(self.__evolutions)
