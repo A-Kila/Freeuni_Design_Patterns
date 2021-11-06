@@ -5,13 +5,13 @@ class ConsoleLogger:
     def logStats(self, position: int, power: int, health: int, stamina: int) -> None:
         print(
             f"\tposition: {position}\n"
-            + f"\tposition: {power}\n"
-            + f"\tposition: {health}\n"
-            + f"\tposition: {stamina}\n"
+            + f"\tpower: {power}\n"
+            + f"\thealth: {health}\n"
+            + f"\tstamina: {stamina}\n"
         )
 
     @abstractmethod
-    def LogEvolutions(self) -> None:
+    def logEvolutions(self) -> None:
         pass
 
     @abstractmethod
@@ -20,7 +20,7 @@ class ConsoleLogger:
 
 
 class PreyLogger(ConsoleLogger):
-    def LogEvolutions(self) -> None:
+    def logEvolutions(self) -> None:
         print("Prey evolved")
 
     def logStats(self, position: int, power: int, health: int, stamina: int) -> None:
@@ -32,7 +32,7 @@ class PreyLogger(ConsoleLogger):
 
 
 class PredatorLogger(ConsoleLogger):
-    def LogEvolutions(self) -> None:
+    def logEvolutions(self) -> None:
         print("Predator evolved")
 
     def logStats(self, position: int, power: int, health: int, stamina: int) -> None:

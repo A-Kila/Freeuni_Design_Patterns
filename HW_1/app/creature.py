@@ -1,8 +1,9 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
+from attackManager import AttackManager
 from consoleLogger import ConsoleLogger
 from evolution import EvolutionManager
-from interfaces import ICreature, IMovement
+from interfaces import IAttackManager, ICreature, IMovement
 from movement import Crawl
 
 
@@ -13,8 +14,11 @@ class Creature:
     power: int = 1
     health: int = 100
     stamina: int = 100
-    movement: IMovement = Crawl()
-    evolutionManager: EvolutionManager = EvolutionManager()
+    movement: IMovement = field(default_factory=lambda: Crawl())
+    evolutionManager: EvolutionManager = field(
+        default_factory=lambda: EvolutionManager()
+    )
+    attackManager: IAttackManager = field(default_factory=lambda: AttackManager())
 
     def __post_init__(self) -> None:
         self.logger.logStats(self.position, self.power, self.health, self.stamina)
@@ -24,13 +28,9 @@ class Creature:
         self.position += movementStats[0]
         self.stamina -= movementStats[1]
 
-    def attack(self, other: ICreature) -> None:
-        if self.health <= 0:
-            return
-
-        other.health -= self.power
-        if other.health <= 0:
-            self.printWonMessage()
+    def fight(self, other: ICreature) -> None:
+        winner: ICreature = self.attackManager.fight(self, other)
+        winner.printWonMessage()
 
     def evolve(self, maxEvolutions: int) -> None:
         self.evolutionManager.evolve(self, self.logger, maxEvolutions)

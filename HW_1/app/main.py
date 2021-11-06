@@ -4,10 +4,11 @@ from consoleLogger import PredatorLogger, PreyLogger
 from creature import Creature
 
 if __name__ == "__main__":
-    for _ in range(100):
+    for i in range(100):
+        print(f"---- {i} -----------------------------")
         prey: Creature = Creature(
             PreyLogger(),
-            position=randrange(100),
+            position=randrange(1, 100),
             power=randrange(10),
             health=randrange(1000),
             stamina=randrange(1000),
@@ -15,21 +16,20 @@ if __name__ == "__main__":
 
         predator: Creature = Creature(
             PredatorLogger(),
-            position=randrange(100),
+            position=randrange(prey.position),
             power=randrange(10),
             health=randrange(1000),
             stamina=randrange(1000),
         )
+
+        print(predator.evolutionManager == prey.evolutionManager)
 
         prey.evolve(10)
         predator.evolve(10)
 
         while True:
             if predator.position >= prey.position:
-                while predator.health > 0 and prey.health > 0:
-                    predator.attack(prey)
-                    prey.attack(predator)
-
+                predator.fight(prey)
                 break
 
             if predator.stamina <= 0:

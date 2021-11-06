@@ -18,9 +18,20 @@ class ICreature(Protocol):
     stamina: int
     movement: IMovement
 
+    def move(self) -> None:
+        pass
+
+    def printWonMessage(self) -> None:
+        pass
+
 
 class IEvolution(Protocol):
     numEvolve: int
 
     def evolve(self, creature: ICreature) -> None:
+        pass
+
+
+class IAttackManager(Protocol):
+    def fight(self, creature1: ICreature, creature2: ICreature) -> ICreature:
         pass

@@ -1,5 +1,5 @@
-from dataclasses import dataclass
-from random import randrange
+from dataclasses import dataclass, field
+from random import randrange, seed
 
 from consoleLogger import ConsoleLogger
 from interfaces import ICreature, IEvolution
@@ -79,22 +79,21 @@ class EvolutionAdapter:
     def __init__(self, logger: ConsoleLogger) -> None:
         self.logger = logger
 
-    def LogEvolutions(self, evolutions: list[IEvolution]) -> None:
+    def logEvolutions(self, evolutions: list[IEvolution]) -> None:
         log: str = ""
 
         for evolution in evolutions:
             if evolution.numEvolve != 0:
                 log += f"\t{evolution.__class__.__name__} - {evolution.numEvolve}x\n"
 
-        self.logger.LogEvolutions()
+        self.logger.logEvolutions()
         print(log)
 
 
+@dataclass
 class EvolutionManager:
-    __evolutions: list[IEvolution]
-
-    def __init__(self) -> None:
-        self.__evolutions = [
+    __evolutions: list[IEvolution] = field(
+        default_factory=lambda: [
             SmallTooth(),
             MediumTooth(),
             BigTooth(),
@@ -104,8 +103,10 @@ class EvolutionManager:
             Leg(),
             Wing(),
         ]
+    )
 
     def __getRandomEvolution(self) -> IEvolution:
+
         return self.__evolutions[randrange(0, len(self.__evolutions))]
 
     def __getRandomEvolutions(self, maxEvolutions: int) -> list[IEvolution]:
@@ -116,6 +117,9 @@ class EvolutionManager:
 
         return result
 
+    def setRandomSeed(self, randomSeed: int) -> None:
+        seed(randomSeed)
+
     def addEvolution(self, evolution: IEvolution) -> None:
         self.__evolutions.append(evolution)
 
@@ -125,4 +129,4 @@ class EvolutionManager:
         for bodyPart in self.__getRandomEvolutions(maxEvolution):
             bodyPart.evolve(creature)
 
-        EvolutionAdapter(logger).LogEvolutions(self.__evolutions)
+        EvolutionAdapter(logger).logEvolutions(self.__evolutions)
