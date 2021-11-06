@@ -14,11 +14,9 @@ class Creature:
     power: int = 1
     health: int = 100
     stamina: int = 100
-    movement: IMovement = field(default_factory=lambda: Crawl())
-    evolutionManager: EvolutionManager = field(
-        default_factory=lambda: EvolutionManager()
-    )
-    attackManager: IAttackManager = field(default_factory=lambda: AttackManager())
+    movement: IMovement = field(default_factory=Crawl)
+    evolutionManager: EvolutionManager = field(default_factory=EvolutionManager)
+    attackManager: IAttackManager = field(default_factory=AttackManager)
 
     def __post_init__(self) -> None:
         self.logger.logStats(self.position, self.power, self.health, self.stamina)
