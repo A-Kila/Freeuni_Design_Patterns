@@ -4,10 +4,10 @@ from interfaces import IMovement
 class Crawl:
     speed: int = 1
     stamina: int = 1
-    staminaRequired: int = 0
+    stamina_required: int = 0
 
-    def move(self, staminaAvailable: int) -> tuple[int, int]:
-        if staminaAvailable <= 0:
+    def move(self, stamina_available: int) -> tuple[int, int]:
+        if stamina_available <= 0:
             return (0, 0)
 
         return (self.speed, self.stamina)
@@ -18,16 +18,16 @@ class BaseMovementDecorator:
     movement: IMovement
     speed: int
     stamina: int
-    staminaRequired: int
+    stamina_required: int
 
     def __init__(self, movement: IMovement) -> None:
         self.movement = movement
 
-    def move(self, staminaAvailable: int) -> tuple[int, int]:
-        superStats: tuple[int, int] = self.movement.move(staminaAvailable)
+    def move(self, stamina_available: int) -> tuple[int, int]:
+        super_stats: tuple[int, int] = self.movement.move(stamina_available)
 
-        if staminaAvailable < self.staminaRequired or superStats[0] > self.speed:
-            return superStats
+        if stamina_available < self.stamina_required or super_stats[0] > self.speed:
+            return super_stats
 
         return (self.speed, self.stamina)
 
@@ -35,22 +35,22 @@ class BaseMovementDecorator:
 class HopDecorator(BaseMovementDecorator):
     speed: int = 3
     stamina: int = 2
-    staminaRequired: int = 20
+    stamina_required: int = 20
 
 
 class WalkDecorator(BaseMovementDecorator):
     speed: int = 4
     stamina: int = 2
-    staminaRequired: int = 40
+    stamina_required: int = 40
 
 
 class RunDecorator(BaseMovementDecorator):
     speed: int = 6
     stamina: int = 4
-    staminaRequired: int = 60
+    stamina_required: int = 60
 
 
 class FlyDecorator(BaseMovementDecorator):
     speed: int = 8
     stamina: int = 4
-    staminaRequired: int = 80
+    stamina_required: int = 80

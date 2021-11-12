@@ -1,6 +1,6 @@
 from random import randrange
 
-from consoleLogger import PredatorLogger, PreyLogger
+from console_logger import PredatorLogger, PreyLogger
 from creature import Creature
 
 if __name__ == "__main__":
@@ -22,8 +22,6 @@ if __name__ == "__main__":
             stamina=randrange(1000),
         )
 
-        print(predator.evolutionManager == prey.evolutionManager)
-
         prey.evolve(10)
         predator.evolve(10)
 
@@ -33,7 +31,7 @@ if __name__ == "__main__":
                 break
 
             if predator.stamina <= 0:
-                prey.printWonMessage()
+                prey.print_won_message()
                 break
 
             prey.move()

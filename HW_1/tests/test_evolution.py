@@ -1,6 +1,6 @@
 import pytest
 from _pytest.capture import CaptureResult
-from consoleLogger import PreyLogger
+from console_logger import PreyLogger
 from creature import Creature
 from evolution import (
     BigClaw,
@@ -17,121 +17,121 @@ from interfaces import ICreature, IEvolution
 
 
 @pytest.fixture
-def dummyCreature() -> ICreature:
+def dummy_creature() -> ICreature:
     return Creature(PreyLogger(), 0)
 
 
 @pytest.fixture
-def evolutionAdapter() -> EvolutionAdapter:
+def evolution_adapter() -> EvolutionAdapter:
     return EvolutionAdapter(PreyLogger())
 
 
-def test_evolution_counter(dummyCreature: ICreature) -> None:
-    evolution1 = SmallTooth()
-    evolution2 = SmallTooth()
+def test_evolution_counter(dummy_creature: ICreature) -> None:
+    evolution_1 = SmallTooth()
+    evolution_2 = SmallTooth()
 
-    assert evolution1.numEvolve == 0
-    assert evolution2.numEvolve == 0
+    assert evolution_1.num_evolve == 0
+    assert evolution_2.num_evolve == 0
 
-    evolution1.evolve(dummyCreature)
-    evolution1.evolve(dummyCreature)
+    evolution_1.evolve(dummy_creature)
+    evolution_1.evolve(dummy_creature)
 
-    assert evolution1.numEvolve == 2
-    assert evolution2.numEvolve == 0
+    assert evolution_1.num_evolve == 2
+    assert evolution_2.num_evolve == 0
 
-    evolution2.evolve(dummyCreature)
+    evolution_2.evolve(dummy_creature)
 
-    assert evolution1.numEvolve == 2
-    assert evolution2.numEvolve == 1
-
-
-def test_attack_evolution(dummyCreature: ICreature) -> None:
-    smTooth: IEvolution = SmallTooth()
-    midTooth: IEvolution = MediumTooth()
-    bigTooth: IEvolution = BigTooth()
-
-    smClaw: IEvolution = SmallClaw()
-    midClaw: IEvolution = MediumClaw()
-    bigClaw: IEvolution = BigClaw()
-
-    smTooth.evolve(dummyCreature)
-    assert dummyCreature.power == 4
-
-    midTooth.evolve(dummyCreature)
-    assert dummyCreature.power == 10
-
-    bigTooth.evolve(dummyCreature)
-    assert dummyCreature.power == 19
-
-    smClaw.evolve(dummyCreature)
-    assert dummyCreature.power == 38
-
-    midClaw.evolve(dummyCreature)
-    assert dummyCreature.power == 114
-
-    bigClaw.evolve(dummyCreature)
-    assert dummyCreature.power == 456
+    assert evolution_1.num_evolve == 2
+    assert evolution_2.num_evolve == 1
 
 
-def test_move_evolution(dummyCreature: ICreature) -> None:
+def test_attack_evolution(dummy_creature: ICreature) -> None:
+    sm_tooth: IEvolution = SmallTooth()
+    mid_tooth: IEvolution = MediumTooth()
+    big_tooth: IEvolution = BigTooth()
+
+    sm_claw: IEvolution = SmallClaw()
+    mid_claw: IEvolution = MediumClaw()
+    big_claw: IEvolution = BigClaw()
+
+    sm_tooth.evolve(dummy_creature)
+    assert dummy_creature.power == 4
+
+    mid_tooth.evolve(dummy_creature)
+    assert dummy_creature.power == 10
+
+    big_tooth.evolve(dummy_creature)
+    assert dummy_creature.power == 19
+
+    sm_claw.evolve(dummy_creature)
+    assert dummy_creature.power == 38
+
+    mid_claw.evolve(dummy_creature)
+    assert dummy_creature.power == 114
+
+    big_claw.evolve(dummy_creature)
+    assert dummy_creature.power == 456
+
+
+def test_move_evolution(dummy_creature: ICreature) -> None:
     leg: IEvolution = Leg()
     wing: IEvolution = Wing()
 
-    dummyCreature.move()
-    assert dummyCreature.position == 1
-    assert dummyCreature.stamina == 99
+    dummy_creature.move()
+    assert dummy_creature.position == 1
+    assert dummy_creature.stamina == 99
 
-    leg.evolve(dummyCreature)
-    dummyCreature.move()
-    assert dummyCreature.position == 4
-    assert dummyCreature.stamina == 97
+    leg.evolve(dummy_creature)
+    dummy_creature.move()
+    assert dummy_creature.position == 4
+    assert dummy_creature.stamina == 97
 
-    leg.evolve(dummyCreature)
-    dummyCreature.move()
-    assert dummyCreature.position == 10
-    assert dummyCreature.stamina == 93
+    leg.evolve(dummy_creature)
+    dummy_creature.move()
+    assert dummy_creature.position == 10
+    assert dummy_creature.stamina == 93
 
-    wing.evolve(dummyCreature)
-    dummyCreature.move()
-    assert dummyCreature.position == 16
-    assert dummyCreature.stamina == 89
+    wing.evolve(dummy_creature)
+    dummy_creature.move()
+    assert dummy_creature.position == 16
+    assert dummy_creature.stamina == 89
 
-    wing.evolve(dummyCreature)
-    dummyCreature.move()
-    assert dummyCreature.position == 24
-    assert dummyCreature.stamina == 85
+    wing.evolve(dummy_creature)
+    dummy_creature.move()
+    assert dummy_creature.position == 24
+    assert dummy_creature.stamina == 85
 
-    dummyCreature.move()
-    assert dummyCreature.position == 32
-    assert dummyCreature.stamina == 81
+    dummy_creature.move()
+    assert dummy_creature.position == 32
+    assert dummy_creature.stamina == 81
 
-    dummyCreature.move()
-    assert dummyCreature.position == 40
-    assert dummyCreature.stamina == 77
+    dummy_creature.move()
+    assert dummy_creature.position == 40
+    assert dummy_creature.stamina == 77
 
-    dummyCreature.move()
-    assert dummyCreature.position == 46
-    assert dummyCreature.stamina == 73
+    dummy_creature.move()
+    assert dummy_creature.position == 46
+    assert dummy_creature.stamina == 73
 
 
 def test_evolution_adapter(
     capsys: pytest.CaptureFixture[str],
-    evolutionAdapter: EvolutionAdapter,
-    dummyCreature: ICreature,
+    evolution_adapter: EvolutionAdapter,
+    dummy_creature: ICreature,
 ) -> None:
     evolutions: list[IEvolution] = [SmallTooth()]
-    evolutions[0].evolve(dummyCreature)
-    evolutions[0].evolve(dummyCreature)
+    evolutions[0].evolve(dummy_creature)
+    evolutions[0].evolve(dummy_creature)
 
     capsys.readouterr()
-    evolutionAdapter.logEvolutions(evolutions)
+    evolution_adapter.log_evolutions(evolutions)
     captured: CaptureResult[str] = capsys.readouterr()
     assert captured.out == "Prey evolved\n\tSmallTooth - 2x\n\n"
 
     evolutions = [SmallTooth()]
-    evolutions[0].evolve(dummyCreature)
+    evolutions[0].evolve(dummy_creature)
 
-    evolutionAdapter.logEvolutions(evolutions)
+    evolution_adapter.log_evolutions(evolutions)
     captured = capsys.readouterr()
     assert captured.out == "Prey evolved\n\tSmallTooth - 1x\n\n"
 
@@ -139,17 +139,17 @@ def test_evolution_adapter(
 def test_evolveManager(capsys: pytest.CaptureFixture[str]) -> None:
     seed: int = 420
 
-    creature1: Creature = Creature(PreyLogger(), 0)
-    creature2: Creature = Creature(PreyLogger(), 0)
+    creature_1: Creature = Creature(PreyLogger(), 0)
+    creature_2: Creature = Creature(PreyLogger(), 0)
 
     capsys.readouterr()
 
-    creature2.evolutionManager.setRandomSeed(seed)
-    creature1.evolve(10)
-    evolve1: str = capsys.readouterr().out
+    creature_2.evolution_manager.set_random_seed(seed)
+    creature_1.evolve(10)
+    evolve_1: str = capsys.readouterr().out
 
-    creature1.evolutionManager.setRandomSeed(seed)
-    creature2.evolve(10)
-    evolve2: str = capsys.readouterr().out
+    creature_1.evolution_manager.set_random_seed(seed)
+    creature_2.evolve(10)
+    evolve_2: str = capsys.readouterr().out
 
-    assert evolve1 == evolve2
+    assert evolve_1 == evolve_2

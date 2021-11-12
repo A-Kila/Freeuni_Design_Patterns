@@ -1,38 +1,38 @@
 import pytest
-from consoleLogger import PredatorLogger, PreyLogger
+from console_logger import PredatorLogger, PreyLogger
 
 
-def test_logStats(capsys: pytest.CaptureFixture[str]) -> None:
+def test_log_stats(capsys: pytest.CaptureFixture[str]) -> None:
     capsys.readouterr()
 
-    PreyLogger().logStats(1, 1, 1, 1)
+    PreyLogger().log_stats(1, 1, 1, 1)
     assert (
         capsys.readouterr().out
         == "Prey initilized with the stats:\n\tposition: 1\n\tpower: 1\n\thealth: 1\n\tstamina: 1\n\n"
     )
 
-    PredatorLogger().logStats(1, 1, 1, 1)
+    PredatorLogger().log_stats(1, 1, 1, 1)
     assert (
         capsys.readouterr().out
         == "Predator initilized with the stats:\n\tposition: 1\n\tpower: 1\n\thealth: 1\n\tstamina: 1\n\n"
     )
 
 
-def test_winMessage(capsys: pytest.CaptureFixture[str]) -> None:
+def test_win_message(capsys: pytest.CaptureFixture[str]) -> None:
     capsys.readouterr()
 
-    PreyLogger().printWinMessage()
+    PreyLogger().print_win_message()
     assert capsys.readouterr().out == "Prey ran into infinity\n"
 
-    PredatorLogger().printWinMessage()
+    PredatorLogger().print_win_message()
     assert capsys.readouterr().out == "Some R rated things have happened\n"
 
 
-def test_logEvolutions(capsys: pytest.CaptureFixture[str]) -> None:
+def test_log_evolutions(capsys: pytest.CaptureFixture[str]) -> None:
     capsys.readouterr()
 
-    PreyLogger().logEvolutions()
+    PreyLogger().log_evolutions()
     assert capsys.readouterr().out == "Prey evolved\n"
 
-    PredatorLogger().logEvolutions()
+    PredatorLogger().log_evolutions()
     assert capsys.readouterr().out == "Predator evolved\n"

@@ -1,17 +1,17 @@
 from dataclasses import dataclass, field
 from random import randrange, seed
 
-from consoleLogger import ConsoleLogger
+from console_logger import ConsoleLogger
 from interfaces import ICreature, IEvolution
 from movement import FlyDecorator, HopDecorator, RunDecorator, WalkDecorator
 
 
 @dataclass
 class BaseEvolution:
-    numEvolve: int = 0
+    num_evolve: int = 0
 
     def evolve(self, _: ICreature) -> None:
-        self.numEvolve += 1
+        self.num_evolve += 1
 
 
 class Tooth(BaseEvolution):
@@ -58,10 +58,10 @@ class Leg(BaseEvolution):
     def evolve(self, creature: ICreature) -> None:
         super().evolve(creature)
 
-        if self.numEvolve == 1:
+        if self.num_evolve == 1:
             creature.movement = HopDecorator(creature.movement)
 
-        if self.numEvolve == 2:
+        if self.num_evolve == 2:
             creature.movement = RunDecorator(WalkDecorator(creature.movement))
 
 
@@ -69,7 +69,7 @@ class Wing(BaseEvolution):
     def evolve(self, creature: ICreature) -> None:
         super().evolve(creature)
 
-        if self.numEvolve == 2:
+        if self.num_evolve == 2:
             creature.movement = FlyDecorator(creature.movement)
 
 
@@ -79,14 +79,14 @@ class EvolutionAdapter:
     def __init__(self, logger: ConsoleLogger) -> None:
         self.logger = logger
 
-    def logEvolutions(self, evolutions: list[IEvolution]) -> None:
+    def log_evolutions(self, evolutions: list[IEvolution]) -> None:
         log: str = ""
 
         for evolution in evolutions:
-            if evolution.numEvolve != 0:
-                log += f"\t{evolution.__class__.__name__} - {evolution.numEvolve}x\n"
+            if evolution.num_evolve != 0:
+                log += f"\t{evolution.__class__.__name__} - {evolution.num_evolve}x\n"
 
-        self.logger.logEvolutions()
+        self.logger.log_evolutions()
         print(log)
 
 
@@ -105,24 +105,24 @@ class EvolutionManager:
         ]
     )
 
-    def __getRandomEvolution(self) -> IEvolution:
+    def __get_random_evolution(self) -> IEvolution:
         return self.__evolutions[randrange(0, len(self.__evolutions))]
 
-    def __getRandomEvolutions(self, maxEvolutions: int) -> list[IEvolution]:
+    def __get_random_evolutions(self, max_evolutions: int) -> list[IEvolution]:
         result: list[IEvolution] = list()
-        for _ in range(randrange(0, maxEvolutions)):
-            result.append(self.__getRandomEvolution())
+        for _ in range(randrange(0, max_evolutions)):
+            result.append(self.__get_random_evolution())
 
         return result
 
-    def setRandomSeed(self, randomSeed: int) -> None:
+    def set_random_seed(self, randomSeed: int) -> None:
         seed(randomSeed)
 
-    def addEvolution(self, evolution: IEvolution) -> None:
+    def add_evolution(self, evolution: IEvolution) -> None:
         self.__evolutions.append(evolution)
 
     def evolve(self, creature: ICreature, logger: ConsoleLogger, maxEvol: int) -> None:
-        for bodyPart in self.__getRandomEvolutions(maxEvol):
+        for bodyPart in self.__get_random_evolutions(maxEvol):
             bodyPart.evolve(creature)
 
-        EvolutionAdapter(logger).logEvolutions(self.__evolutions)
+        EvolutionAdapter(logger).log_evolutions(self.__evolutions)

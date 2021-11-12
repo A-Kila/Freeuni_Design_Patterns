@@ -4,10 +4,10 @@ from typing import Protocol
 class IMovement(Protocol):
     speed: int
     stamina: int
-    staminaRequired: int
+    stamina_required: int
 
     # returns pair of position change and stamina used
-    def move(self, staminaAvailable: int) -> tuple[int, int]:
+    def move(self, stamina_available: int) -> tuple[int, int]:
         pass
 
 
@@ -21,17 +21,17 @@ class ICreature(Protocol):
     def move(self) -> None:
         pass
 
-    def printWonMessage(self) -> None:
+    def print_won_message(self) -> None:
         pass
 
 
 class IEvolution(Protocol):
-    numEvolve: int
+    num_evolve: int
 
     def evolve(self, creature: ICreature) -> None:
         pass
 
 
 class IAttackManager(Protocol):
-    def fight(self, creature1: ICreature, creature2: ICreature) -> ICreature:
+    def fight(self, creature_1: ICreature, creature_2: ICreature) -> ICreature:
         pass
