@@ -1,21 +1,87 @@
-from typing import Protocol
+from abc import ABC, abstractmethod
+from dataclasses import dataclass
 
 
-class Item(Protocol):
+class Item(ABC):
     @property
+    @abstractmethod
     def name(self) -> str:
         pass
 
     @property
+    @abstractmethod
     def price(self) -> float:
         pass
 
     @property
+    @abstractmethod
     def units(self) -> int:
         pass
 
+    def __eq__(self, __o: object) -> bool:
+        if not isinstance(__o, self.__class__):
+            return False
 
-class Chacha:
+        return (
+            self.name == __o.name
+            and self.units == __o.units
+            and self.price == self.price
+        )
+
+    def __ne__(self, __o: object) -> bool:
+        return not self == __o
+
+    def __hash__(self) -> int:
+        return hash((self.name, self.price, self.units))
+
+
+@dataclass
+class Pack(Item):
+    _item: Item
+    _units: int
+
+    @property
+    def name(self) -> str:
+        return self._item.name
+
+    @property
+    def price(self) -> float:
+        return self._item.price
+
+    @property
+    def units(self) -> int:
+        return self._units
+
+
+@dataclass
+class Collection(Item):
+    _items: set[Item]
+
+    # Count property values once
+    def __post_init__(self) -> None:
+        self._name: str = ""
+        self._price: float = 0
+
+        for item in self._items:
+            self._name += f"{item.name}-"
+            self._price += item.price
+
+        self._name += "Collection"
+
+    @property
+    def name(self) -> str:
+        return self._name
+
+    @property
+    def price(self) -> float:
+        return self._price
+
+    @property
+    def units(self) -> int:
+        return 1
+
+
+class Chacha(Item):
     @property
     def name(self) -> str:
         return "Chacha"
@@ -29,25 +95,7 @@ class Chacha:
         return 1
 
 
-class ChachaSixPack:
-    def __init__(self) -> None:
-        super().__init__()
-        self.chacha = Chacha()
-
-    @property
-    def name(self) -> str:
-        return self.chacha.name
-
-    @property
-    def price(self) -> float:
-        return self.chacha.price
-
-    @property
-    def units(self) -> int:
-        return 6
-
-
-class BabyFood:
+class BabyFood(Item):
     @property
     def name(self) -> str:
         return "Baby Food"
@@ -61,7 +109,7 @@ class BabyFood:
         return 1
 
 
-class Car:
+class Car(Item):
     @property
     def name(self) -> str:
         return "Car"
@@ -69,44 +117,6 @@ class Car:
     @property
     def price(self) -> float:
         return 5000.01
-
-    @property
-    def units(self) -> int:
-        return 1
-
-
-class CarBatch:
-    def __init__(self) -> None:
-        super().__init__()
-        self.car = Car()
-
-    @property
-    def name(self) -> str:
-        return self.car.name
-
-    @property
-    def price(self) -> float:
-        return self.car.price
-
-    @property
-    def units(self) -> int:
-        return 3
-
-
-class ChachaPackCarCollection:
-    def __init__(self) -> None:
-        super().__init__()
-
-        self.chacha_pack = ChachaSixPack()
-        self.car = Car()
-
-    @property
-    def name(self) -> str:
-        return "Chacha Six Pack and Car Bundle"
-
-    @property
-    def price(self) -> float:
-        return self.car.price + self.chacha_pack.price
 
     @property
     def units(self) -> int:

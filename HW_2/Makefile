@@ -12,7 +12,7 @@ fmt format: ## Run code formatters
 	black app tests
 
 lint: ## Run code linters
-	isort --check app ## tests
-	black --check app ## tests
-	flake8 app ## tests
-	mypy app ## tests
+	isort --check app tests
+	black --check app tests
+	flake8 app tests
+	mypy app tests

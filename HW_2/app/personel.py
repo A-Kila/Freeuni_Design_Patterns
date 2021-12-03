@@ -1,7 +1,8 @@
+from dataclasses import dataclass, field
 from random import randint
 
 from cash_register import CashRegister
-from item_factory import RandomItemShop
+from item_factory import RandomItemShop, Shop
 from items import Item
 from price_calculator import DiscountPriceCalculator
 from receipt import Receipt
@@ -28,19 +29,20 @@ class Cashier:
         CashRegister.getInstance().clear_cash_register()
 
 
+@dataclass
 class Customer:
+    shop: Shop = field(default_factory=RandomItemShop)
+
     def pick_items(self, amount: int) -> None:
-        self._picked_items: list[Item] = RandomItemShop().get_n_items(amount)
+        self._picked_items: list[Item] = self.shop.get_items(amount)
 
     def get_picked_items(self) -> list[Item]:
         return self._picked_items
 
     def pay_for_items(self) -> None:
         rand = randint(0, 1)
-        if rand:
-            print("Payed with cash")
-        else:
-            print("Payed with card")
+
+        print("Payed with cash") if rand else print("Payed with card")
 
 
 class StoreManager:

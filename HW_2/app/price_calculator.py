@@ -28,6 +28,9 @@ class DiscountPriceCalculator(TotalPriceCalculatorTemplate):
         self._discounts[item] = discount
 
     def get_price(self, item: Item) -> float:
+        if item not in self._discounts.keys():
+            return self.get_base_price(item)
+
         return self.get_base_price(item) * (1 - self._discounts[item])
 
 

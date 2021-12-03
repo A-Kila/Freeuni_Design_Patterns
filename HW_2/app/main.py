@@ -1,13 +1,11 @@
 from itertools import count
 from random import randint
 
-from items import BabyFood, CarBatch, ChachaPackCarCollection, Item
+from items import BabyFood, Car, Chacha, Collection, Item, Pack
 from personel import Cashier, Customer, StoreManager
 from price_calculator import DiscountPriceCalculator
 
-
 if __name__ == "__main__":
-
     for _ in range(3):
         manager: StoreManager = StoreManager()
 
@@ -16,9 +14,9 @@ if __name__ == "__main__":
             cashier: Cashier = Cashier()
 
             discounts: dict[Item, float] = {
-                ChachaPackCarCollection(): 0.7,
+                Collection({Car(), Chacha()}): 0.7,
                 BabyFood(): 0.1,
-                CarBatch(): 0.2,
+                Pack(Chacha(), 6): 0.2,
             }
 
             customer.pick_items(randint(1, 100))
