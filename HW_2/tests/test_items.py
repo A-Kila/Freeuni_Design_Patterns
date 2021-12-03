@@ -87,7 +87,7 @@ def test_packs(
 
 
 def test_Collections(car_and_chacha: Collection, car: Item, chacha: Item) -> None:
-    item_set: set[Item] = {Car(), Chacha()}
+    item_set: set[Item] = {Car(), Chacha(), Car()}
     name: str = ""
     for item in item_set:
         name += f"{item.name}-"
