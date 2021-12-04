@@ -52,6 +52,9 @@ class Pack(Item):
     def units(self) -> int:
         return self._units
 
+    def __hash__(self) -> int:
+        return super().__hash__()
+
 
 @dataclass
 class Collection(Item):
@@ -59,6 +62,8 @@ class Collection(Item):
 
     # Count property values once
     def __post_init__(self) -> None:
+        assert len(self._items) > 1
+
         self._name: str = ""
         self._price: float = 0
 
@@ -79,6 +84,9 @@ class Collection(Item):
     @property
     def units(self) -> int:
         return 1
+
+    def __hash__(self) -> int:
+        return super().__hash__()
 
 
 class Chacha(Item):

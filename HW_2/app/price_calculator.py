@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from items import Item
 
@@ -20,18 +20,15 @@ class TotalPriceCalculator(TotalPriceCalculatorTemplate):
 
 @dataclass
 class DiscountPriceCalculator(TotalPriceCalculatorTemplate):
-    _discounts: dict[Item, float] = {}
-
-    def add_discount_0_to_1(self, item: Item, discount: float) -> None:
-        assert discount >= 0 and discount <= 1
-
-        self._discounts[item] = discount
+    discounts: dict[Item, float] = field(default_factory=lambda: {})
 
     def get_price(self, item: Item) -> float:
-        if item not in self._discounts.keys():
+        if item not in self.discounts.keys():
             return self.get_base_price(item)
 
-        return self.get_base_price(item) * (1 - self._discounts[item])
+        assert self.discounts[item] >= 0 and self.discounts[item] <= 1
+
+        return self.get_base_price(item) * (1 - self.discounts[item])
 
 
 # If needed, we can add price calculator with taxes or something similar

@@ -21,7 +21,7 @@ class CashReportLogger:
         for item, units in self._items_sold.items():
             report += f"{item.name}    {units}\n"
 
-        report += f"Total Revenue: {self._revenue}"
+        report += f"Total Revenue: {self._revenue}\n"
 
         print(report)
 
@@ -38,6 +38,6 @@ class RecieptLogger:
         for item in self._items:
             recipt += f"{item.name}    {item.units}    {item.price}    {self._price_calculator.get_price(item)}\n"
 
-        recipt += f"Sum: {self._sum}"
+        recipt += f"Sum: {self._sum}\n"
 
         print(recipt)

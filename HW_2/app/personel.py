@@ -25,8 +25,16 @@ class Cashier:
     def confirm_payment(self) -> None:
         CashRegister.getInstance().add_paid_items_from_receipt(self.recipt)
 
-    def make_z_report(self) -> None:
-        CashRegister.getInstance().clear_cash_register()
+    def make_z_report(self) -> bool:
+        print("Do You want to make Z report? (Y/y for yes)")
+        inp: str = input()
+
+        if inp == 'y' or inp == 'Y':
+            CashRegister.getInstance().clear_cash_register()
+
+        print('')
+
+        return inp == 'y' or inp == 'Y'
 
 
 @dataclass
@@ -42,9 +50,15 @@ class Customer:
     def pay_for_items(self) -> None:
         rand = randint(0, 1)
 
-        print("Payed with cash") if rand else print("Payed with card")
+        print("Payed with cash\n") if rand else print("Payed with card\n")
 
 
 class StoreManager:
     def make_x_report(self) -> None:
-        CashRegister.getInstance().print_register_info()
+        print("Do You want to make X report? (Y/y for yes)")
+        inp: str = input()
+
+        if inp == 'y' or inp == 'Y':
+            CashRegister.getInstance().print_register_info()
+
+        print('')

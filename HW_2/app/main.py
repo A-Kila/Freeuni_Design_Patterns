@@ -6,10 +6,12 @@ from personel import Cashier, Customer, StoreManager
 from price_calculator import DiscountPriceCalculator
 
 if __name__ == "__main__":
-    for _ in range(3):
+    for i in range(3):
+        print(f'________________________{i}_________________________')
         manager: StoreManager = StoreManager()
 
-        for i in count(1):
+        for j in count(1):
+            print(f'~~~~~~~~~~~~~~~~~~~~{j}~~~~~~~~~~~~~~~~~~~~~~')
             customer: Customer = Customer()
             cashier: Cashier = Cashier()
 
@@ -19,16 +21,16 @@ if __name__ == "__main__":
                 Pack(Chacha(), 6): 0.2,
             }
 
-            customer.pick_items(randint(1, 100))
+            customer.pick_items(randint(1, 10))
             cashier.open_recipt(DiscountPriceCalculator(discounts))
             cashier.register_items(customer.get_picked_items())
             cashier.print_recipt()
             customer.pay_for_items()
             cashier.confirm_payment()
 
-            if i % 20 == 0:
+            if j % 20 == 0:
                 manager.make_x_report()
 
-            if i % 100 == 0:
-                cashier.make_z_report()
-                break
+            if j % 100 == 0:
+                if cashier.make_z_report():
+                    break
