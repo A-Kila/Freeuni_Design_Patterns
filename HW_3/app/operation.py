@@ -1,11 +1,4 @@
-from typing import Protocol
-
 from event_manager import EventManger
-
-
-class IOperation(Protocol):
-    def execute(self, event_manager: EventManger, command: str) -> bool:
-        pass
 
 
 class Subscribe:

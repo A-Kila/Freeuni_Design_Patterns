@@ -1,15 +1,14 @@
 from dataclasses import dataclass, field
-from enum import Enum
+from typing import Protocol
 
 from database import SqlLiteDataBase
 from event_manager import EventManger
-from operation import IOperation, Publish, Subscribe
+from operation import Publish, Subscribe
 
 
-class Operation(Enum):
-    SUBSCRIBE = 1
-    PUBLISH = 2
-    WRONG_OP = 3
+class IOperation(Protocol):
+    def execute(self, event_manager: EventManger, command: str) -> bool:
+        pass
 
 
 @dataclass
