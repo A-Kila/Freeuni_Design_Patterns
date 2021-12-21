@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from enum import Enum
 
-from data_base import SqlLiteDataBase
+from database import SqlLiteDataBase
 from event_manager import EventManger
 from operation import IOperation, Publish, Subscribe
 

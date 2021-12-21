@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from sqlite3 import connect, Connection, Cursor
+from sqlite3 import Connection, Cursor, connect
 
 
 @dataclass
@@ -12,11 +12,11 @@ class DummyDataBase:
 
         self.__map[key].add(value)
 
-    def get_from_key(self, key: str) -> list[str]:
+    def get_from_key(self, key: str) -> set[str]:
         if key not in self.__map:
-            self.__map[key] = set() 
+            self.__map[key] = set()
 
-        return list(self.__map[key])
+        return self.__map[key]
 
 
 class SqlLiteDataBase:
@@ -26,10 +26,12 @@ class SqlLiteDataBase:
         con: Connection = connect(self.db_name)
         cur: Cursor = con.cursor()
 
-        cur.execute('''
+        cur.execute(
+            """
             CREATE TABLE IF NOT EXISTS subscribers
                 (channel text, user text)
-        ''')
+        """
+        )
 
         con.commit()
         con.close()
@@ -37,8 +39,11 @@ class SqlLiteDataBase:
     def add_pair(self, key: str, value: str) -> None:
         con: Connection = connect(self.db_name)
         cur: Cursor = con.cursor()
-        
-        cur.execute("SELECT channel, user FROM subscribers WHERE channel=? AND user=?", (key, value))
+
+        cur.execute(
+            "SELECT channel, user FROM subscribers WHERE channel=? AND user=?",
+            (key, value),
+        )
         query: list[tuple[str, str]] = cur.fetchall()
 
         if len(query) == 0:
@@ -47,13 +52,13 @@ class SqlLiteDataBase:
         con.commit()
         con.close()
 
-    def get_from_key(self, key: str) -> list[str]:
+    def get_from_key(self, key: str) -> set[str]:
         con: Connection = connect(self.db_name)
         cur: Cursor = con.cursor()
 
         cur.execute("SELECT user FROM subscribers WHERE channel=?", (key,))
         query: list[tuple[str]] = cur.fetchall()
-        res: list[str] = list(map(lambda x: x[0], query))
+        res: set[str] = set(user_tuple[0] for user_tuple in query)
 
         con.close()
         return res

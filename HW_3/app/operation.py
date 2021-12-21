@@ -56,10 +56,8 @@ class Publish:
             return False
 
         channel: str = tokenized[3][1:-1]
-        users: list[str] = event_manager.notify(channel)
-
         print(f"Notifying subscribers of {channel}")
-        for user in users:
-            print(f"\t{user}")
+
+        event_manager.notify(channel)
 
         return True
