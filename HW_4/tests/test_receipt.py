@@ -1,6 +1,6 @@
-from items import BabyFood, Car, Chacha, Collection, Item, Pack
-from price_calculator import DiscountPriceCalculator
-from receipt import Receipt
+from core.items import BabyFood, Car, Chacha, Collection, Item, Pack
+from core.price_calculator import DiscountPriceCalculator
+from core.receipt import Receipt
 
 
 def test_receipt() -> None:

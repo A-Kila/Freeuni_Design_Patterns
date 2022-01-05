@@ -1,17 +1,17 @@
 from itertools import count
 from random import randint
 
-from items import BabyFood, Car, Chacha, Collection, Item, Pack
+from core.items import BabyFood, Car, Chacha, Collection, Item, Pack
+from core.price_calculator import DiscountPriceCalculator
 from personel import Cashier, Customer, StoreManager
-from price_calculator import DiscountPriceCalculator
 
 if __name__ == "__main__":
     for i in range(3):
-        print(f'________________________{i}_________________________')
+        print(f"________________________{i}_________________________")
         manager: StoreManager = StoreManager()
 
         for j in count(1):
-            print(f'~~~~~~~~~~~~~~~~~~~~{j}~~~~~~~~~~~~~~~~~~~~~~')
+            print(f"~~~~~~~~~~~~~~~~~~~~{j}~~~~~~~~~~~~~~~~~~~~~~")
             customer: Customer = Customer()
             cashier: Cashier = Cashier()
 

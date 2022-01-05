@@ -1,11 +1,11 @@
 from dataclasses import dataclass, field
 from random import randint
 
-from cash_register import CashRegister
+from core.cash_register import CashRegister
+from core.items import Item
+from core.price_calculator import DiscountPriceCalculator
+from core.receipt import Receipt
 from item_factory import RandomItemShop, Shop
-from items import Item
-from price_calculator import DiscountPriceCalculator
-from receipt import Receipt
 
 
 class Cashier:
@@ -20,7 +20,7 @@ class Cashier:
         self.recipt.print_receipt()
 
     def get_price_sum(self) -> float:
-        return self.recipt.sum
+        return float(self.recipt.sum)
 
     def confirm_payment(self) -> None:
         CashRegister.getInstance().add_paid_items_from_receipt(self.recipt)
@@ -29,12 +29,12 @@ class Cashier:
         print("Do You want to make Z report? (Y/y for yes)")
         inp: str = input()
 
-        if inp == 'y' or inp == 'Y':
+        if inp == "y" or inp == "Y":
             CashRegister.getInstance().clear_cash_register()
 
-        print('')
+        print("")
 
-        return inp == 'y' or inp == 'Y'
+        return inp == "y" or inp == "Y"
 
 
 @dataclass
@@ -58,7 +58,7 @@ class StoreManager:
         print("Do You want to make X report? (Y/y for yes)")
         inp: str = input()
 
-        if inp == 'y' or inp == 'Y':
+        if inp == "y" or inp == "Y":
             CashRegister.getInstance().print_register_info()
 
-        print('')
+        print("")

@@ -1,5 +1,5 @@
 import pytest
-from items import BabyFood, Car, Chacha, Collection, Item, Pack
+from core.items import BabyFood, Car, Chacha, Collection, Item, Pack
 
 
 @pytest.fixture

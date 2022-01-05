@@ -1,8 +1,8 @@
 from dataclasses import dataclass
 from typing import Protocol
 
-from items import Item
-from price_calculator import DiscountPriceCalculator
+from core.items import Item
+from core.price_calculator import DiscountPriceCalculator
 
 
 class ConsoleLoggerStrategy(Protocol):

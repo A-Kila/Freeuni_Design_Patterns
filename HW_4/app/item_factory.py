@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from random import choice, seed
 
-from items import BabyFood, Car, Chacha, Collection, Item, Pack
+from core.items import BabyFood, Car, Chacha, Collection, Item, Pack
 
 
 @dataclass

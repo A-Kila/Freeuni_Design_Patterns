@@ -1,6 +1,6 @@
 import pytest
+from core.items import BabyFood, Car, Chacha, Collection, Item, Pack
 from item_factory import RandomItemShop, Shop
-from items import BabyFood, Car, Chacha, Collection, Item, Pack
 
 
 @pytest.fixture

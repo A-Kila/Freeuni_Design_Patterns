@@ -1,6 +1,6 @@
 import pytest
-from items import BabyFood, Car, Chacha, Collection, Item, Pack
-from price_calculator import (
+from core.items import BabyFood, Car, Chacha, Collection, Item, Pack
+from core.price_calculator import (
     DiscountPriceCalculator,
     TotalPriceCalculator,
     TotalPriceCalculatorTemplate,

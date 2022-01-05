@@ -1,7 +1,7 @@
 import pytest
 from console_logger import CashReportLogger, RecieptLogger
-from items import BabyFood, Car, Chacha, Collection, Item, Pack
-from price_calculator import DiscountPriceCalculator
+from core.items import BabyFood, Car, Chacha, Collection, Item, Pack
+from core.price_calculator import DiscountPriceCalculator
 
 
 def test_report_logger(capsys: pytest.CaptureFixture[str]) -> None:
