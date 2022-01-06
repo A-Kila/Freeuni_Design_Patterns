@@ -1,12 +1,12 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 
-from items import Item
+from app.core.item.items import Item
 
 
 class TotalPriceCalculatorTemplate(ABC):
     def get_base_price(self, item: Item) -> float:
-        return item.price * item.units
+        return float(item.price * item.units)
 
     @abstractmethod
     def get_price(self, item: Item) -> float:

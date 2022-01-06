@@ -1,22 +1,22 @@
-from abc import ABC, abstractmethod
 from dataclasses import dataclass
 
 
-class Item(ABC):
+@dataclass
+class Item:
+    _name: str
+    _price: float
+
     @property
-    @abstractmethod
     def name(self) -> str:
-        pass
+        return self._name
 
     @property
-    @abstractmethod
     def price(self) -> float:
-        pass
+        return self._price
 
     @property
-    @abstractmethod
     def units(self) -> int:
-        pass
+        return 1
 
     def __eq__(self, __o: object) -> bool:
         if not isinstance(__o, self.__class__):
@@ -56,6 +56,7 @@ class Pack(Item):
         return super().__hash__()
 
 
+# We Do not need this class in this assignment
 @dataclass
 class Collection(Item):
     _items: set[Item]
@@ -87,45 +88,3 @@ class Collection(Item):
 
     def __hash__(self) -> int:
         return super().__hash__()
-
-
-class Chacha(Item):
-    @property
-    def name(self) -> str:
-        return "Chacha"
-
-    @property
-    def price(self) -> float:
-        return 19.99
-
-    @property
-    def units(self) -> int:
-        return 1
-
-
-class BabyFood(Item):
-    @property
-    def name(self) -> str:
-        return "Baby Food"
-
-    @property
-    def price(self) -> float:
-        return 2.49
-
-    @property
-    def units(self) -> int:
-        return 1
-
-
-class Car(Item):
-    @property
-    def name(self) -> str:
-        return "Car"
-
-    @property
-    def price(self) -> float:
-        return 5000.01
-
-    @property
-    def units(self) -> int:
-        return 1
