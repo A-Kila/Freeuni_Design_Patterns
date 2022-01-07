@@ -34,7 +34,8 @@ class ShopService:
     def add_item_to_shopping_list(self, item_key: str) -> None:
         item = self.item_interactor.get_item(item_key)
 
-        self.cashier.add_item_to_receipt(item)
+        if item is not None:
+            self.cashier.add_item_to_receipt(item)
 
     def buy_items(self) -> None:
         self.cashier.buy_items_from_receipt()

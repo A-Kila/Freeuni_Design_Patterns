@@ -32,7 +32,9 @@ class CashRegister:
         return CashRegister._instance
 
     def add_paid_items_from_receipt(self, receipt: Receipt) -> None:
-        print(receipt, receipt.sum)
+        if receipt.sum == 0:
+            return
+
         self.revenue += receipt.sum
 
         for item, _ in receipt.items:

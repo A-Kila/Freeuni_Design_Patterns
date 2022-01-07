@@ -4,7 +4,7 @@ from app.core.facade import ShopService
 from app.core.item.interactor import IItemRepository
 from app.core.item.items import Item
 from app.infra.fastapi.api import shop_api
-from app.infra.in_memory.in_memory import dummyMemory
+from app.infra.in_memory.in_memory import DummyMemory
 
 
 def setup() -> FastAPI:
@@ -16,7 +16,7 @@ def setup() -> FastAPI:
 
 
 def setup_repository() -> IItemRepository:
-    repo = dummyMemory()
+    repo = DummyMemory()
     repo.create(Item("item1", 9.99))
     repo.create(Item("item2", 19.99))
 
