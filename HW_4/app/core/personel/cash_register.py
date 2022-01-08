@@ -1,25 +1,46 @@
-from typing import Optional
+from dataclasses import dataclass
+from typing import Optional, Protocol
 
 from app.core.item.items import Item
 from app.core.personel.receipt import Receipt
 
 
+class IDate(Protocol):
+    def set_date(self, date_str: str) -> None:
+        pass
+
+    def get_date_str(self) -> str:
+        pass
+
+    def go_to_next_day(self) -> None:
+        pass
+
+
+@dataclass
+class DayCountDate:
+    day: int = 0
+
+    def set_date(self, date_str: str) -> None:
+        self.day = int(date_str)
+
+    def get_date_str(self) -> str:
+        return str(self.day)
+
+    def go_to_next_day(self) -> None:
+        self.day += 1
+
+
+@dataclass
 class XReport:
-    def __init__(
-        self, items: dict[Item, int], sum: float, closed_receipts: int
-    ) -> None:
-        self.items = dict[str, int]()
-
-        for item, units in items.items():
-            self.items[item.name] = units
-
-        self.total_revenue = sum
-        self.closed_receipts = closed_receipts
+    items: dict[str, int]
+    total_revenue: float
+    closed_receipts: int
+    date: str
 
 
 class CashRegister:
     _instance: Optional["CashRegister"] = None
-    day: int = 0
+    date: IDate = DayCountDate()
     checks_closed: int = 0
     revenue: float = 0
     items_sold: dict[Item, int] = dict[Item, int]()
@@ -46,11 +67,19 @@ class CashRegister:
         self.checks_closed += 1
 
     def make_X_report(self) -> XReport:
-        return XReport(self.items_sold, self.revenue, self.checks_closed)
+        report = XReport(
+            dict(map(lambda x: (x[0].name, x[1]), self.items_sold.items())),
+            self.revenue,
+            self.checks_closed,
+            self.date.get_date_str(),
+        )
+        self.finish_day()
+
+        return report
 
     def finish_day(self) -> None:
         self.checks_closed = 0
         self.revenue = 0
         self.items_sold.clear()
 
-        self.day += 1
+        self.date.go_to_next_day()

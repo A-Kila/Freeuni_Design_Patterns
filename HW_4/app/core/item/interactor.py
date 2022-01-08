@@ -47,8 +47,7 @@ class ItemInteractor:
     item_repository: IItemRepository
     price_calculator: TotalPriceCalculatorTemplate
 
-    def _get_one_item_response(self, item: Item) -> ItemResponse:
-        print(item)
+    def _get_item_response(self, item: Item) -> ItemResponse:
         return ItemResponse(
             item.name, item.price, item.units, self.price_calculator.get_price(item)
         )
@@ -62,14 +61,14 @@ class ItemInteractor:
         if item is None:
             return OneItemResponse(None)
 
-        return OneItemResponse(self._get_one_item_response(item))
+        return OneItemResponse(self._get_item_response(item))
 
     def get_all_items(self) -> AllItemsResponse:
         items: dict[str, Item] = self.item_repository.fetch_all()
 
         responses = list(
             map(
-                lambda x: KeyItemPair(x[0], self._get_one_item_response(x[1])),
+                lambda x: KeyItemPair(x[0], self._get_item_response(x[1])),
                 items.items(),
             )
         )

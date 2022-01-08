@@ -12,10 +12,13 @@ from app.core.item.price_calculator import (
     TotalPriceCalculatorTemplate,
 )
 from app.core.personel.personel import (
+    AllXReportResponse,
     Cashier,
+    IXReportRepository,
+    OneXReportRequest,
+    OneXReportResponse,
     ReceiptResponse,
     StoreManager,
-    XReportResponse,
 )
 
 
@@ -43,17 +46,24 @@ class ShopService:
     def get_current_receipt(self) -> ReceiptResponse:
         return self.cashier.get_current_receipt()
 
-    def get_X_report(self) -> XReportResponse:
-        return self.store_manager.make_X_report()
+    def get_all_X_reports(self) -> AllXReportResponse:
+        return self.store_manager.get_all_X_reports()
+
+    def get_one_X_report(self, date: OneXReportRequest) -> OneXReportResponse:
+        return self.store_manager.get_one_X_report(date)
+
+    def make_X_report(self) -> None:
+        self.store_manager.make_X_report()
 
     @classmethod
     def create(
         cls,
-        repository: IItemRepository,
+        item_repository: IItemRepository,
+        report_repository: IXReportRepository,
         price_calculator: TotalPriceCalculatorTemplate = TotalPriceCalculator(),
     ) -> "ShopService":
         return cls(
-            item_interactor=ItemInteractor(repository, price_calculator),
+            item_interactor=ItemInteractor(item_repository, price_calculator),
             cashier=Cashier(TotalPriceCalculator()),
-            store_manager=StoreManager(),
+            store_manager=StoreManager(report_repository),
         )

@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from typing import Optional, Protocol
 
 from app.core.item.interactor import ItemResponse
 from app.core.item.items import Item
@@ -18,6 +19,27 @@ class XReportResponse:
     items: dict[str, int]
     total_revenue: float
     closed_receipts: int
+
+
+@dataclass
+class OneXReportRequest:
+    date: str
+
+
+@dataclass
+class OneXReportResponse:
+    X_report: Optional[XReportResponse]
+
+
+@dataclass
+class DateReportPair:
+    date: str
+    report: XReportResponse
+
+
+@dataclass
+class AllXReportResponse:
+    X_reports: list[DateReportPair]
 
 
 @dataclass
@@ -45,10 +67,48 @@ class Cashier:
         return ReceiptResponse(items, self._receipt.sum)
 
 
+class IXReportRepository(Protocol):
+    def store(self, report: XReport) -> None:
+        pass
+
+    def fetch_one(self, date: str) -> Optional[XReport]:
+        pass
+
+    def fetch_all(self) -> dict[str, XReport]:
+        pass
+
+
+@dataclass
 class StoreManager:
-    def make_X_report(self) -> XReportResponse:
+    repo: IXReportRepository
+
+    def _get_X_report_response(self, report: XReport) -> XReportResponse:
+        return XReportResponse(
+            report.items, report.total_revenue, report.closed_receipts
+        )
+
+    def get_one_X_report(self, date_request: OneXReportRequest) -> OneXReportResponse:
+        report: Optional[XReport] = self.repo.fetch_one(date_request.date)
+
+        if report is None:
+            return OneXReportResponse(None)
+
+        return OneXReportResponse(self._get_X_report_response(report))
+
+    def get_all_X_reports(self) -> AllXReportResponse:
+        items: dict[str, XReport] = self.repo.fetch_all()
+
+        responses = list(
+            map(
+                lambda x: DateReportPair(x[0], self._get_X_report_response(x[1])),
+                items.items(),
+            )
+        )
+
+        print(responses)
+        return AllXReportResponse(responses)
+
+    def make_X_report(self) -> None:
         X_report: XReport = CashRegister.getInstance().make_X_report()
 
-        return XReportResponse(
-            X_report.items, X_report.total_revenue, X_report.closed_receipts
-        )
+        self.repo.store(X_report)

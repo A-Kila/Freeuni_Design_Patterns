@@ -3,16 +3,12 @@ from dataclasses import dataclass
 
 @dataclass
 class Item:
-    _name: str
-    _price: float
+    name: str
+    price: float
 
     @property
-    def name(self) -> str:
-        return self._name
-
-    @property
-    def price(self) -> float:
-        return self._price
+    def key(self) -> str:
+        return self.name
 
     @property
     def units(self) -> int:
@@ -35,18 +31,14 @@ class Item:
         return hash((self.name, self.price, self.units))
 
 
-@dataclass
 class Pack(Item):
-    _item: Item
-    _units: int
+    def __init__(self, item: Item, units: int) -> None:
+        super().__init__(item.name, item.price)
+        self._units = units
 
     @property
-    def name(self) -> str:
-        return self._item.name
-
-    @property
-    def price(self) -> float:
-        return self._item.price
+    def key(self) -> str:
+        return f"{self.name}-{self._units}Pack"
 
     @property
     def units(self) -> int:
@@ -57,34 +49,18 @@ class Pack(Item):
 
 
 # We Do not need this class in this assignment
-@dataclass
 class Collection(Item):
-    _items: set[Item]
+    def __init__(self, items: set[Item]) -> None:
+        assert len(items) > 1
 
-    # Count property values once
-    def __post_init__(self) -> None:
-        assert len(self._items) > 1
+        self.name: str = ""
+        self.price: float = 0
 
-        self._name: str = ""
-        self._price: float = 0
+        for item in items:
+            self.name += f"{item.name}-"
+            self.price += item.price
 
-        for item in self._items:
-            self._name += f"{item.name}-"
-            self._price += item.price
-
-        self._name += "Collection"
-
-    @property
-    def name(self) -> str:
-        return self._name
-
-    @property
-    def price(self) -> float:
-        return self._price
-
-    @property
-    def units(self) -> int:
-        return 1
+        self.name += "Collection"
 
     def __hash__(self) -> int:
         return super().__hash__()
