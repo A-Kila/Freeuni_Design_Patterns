@@ -24,7 +24,7 @@ class DummyItemRepository:
 
 class SqliteItemRepository:
     def __init__(self, database_name: str) -> None:
-        self.db_name = database_name
+        self.db_name = f"database/{database_name}"
 
         con: Connection = connect(self.db_name)
         cur: Cursor = con.cursor()
