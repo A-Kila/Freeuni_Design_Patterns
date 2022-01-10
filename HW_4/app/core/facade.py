@@ -15,10 +15,10 @@ from app.core.personel.personel import (
     AllXReportResponse,
     Cashier,
     IXReportRepository,
+    Manager,
     OneXReportRequest,
     OneXReportResponse,
     ReceiptResponse,
-    StoreManager,
 )
 
 
@@ -26,7 +26,7 @@ from app.core.personel.personel import (
 class ShopService:
     item_interactor: ItemInteractor
     cashier: Cashier
-    store_manager: StoreManager
+    manager: Manager
 
     def get_all_items(self) -> AllItemsResponse:
         return self.item_interactor.get_all_items()
@@ -47,13 +47,13 @@ class ShopService:
         return self.cashier.get_current_receipt()
 
     def get_all_X_reports(self) -> AllXReportResponse:
-        return self.store_manager.get_all_X_reports()
+        return self.manager.get_all_X_reports()
 
     def get_one_X_report(self, date: OneXReportRequest) -> OneXReportResponse:
-        return self.store_manager.get_one_X_report(date)
+        return self.manager.get_one_X_report(date)
 
     def make_X_report(self) -> None:
-        self.store_manager.make_X_report()
+        self.manager.make_X_report()
 
     @classmethod
     def create(
@@ -65,5 +65,5 @@ class ShopService:
         return cls(
             item_interactor=ItemInteractor(item_repository, price_calculator),
             cashier=Cashier(TotalPriceCalculator()),
-            store_manager=StoreManager(report_repository),
+            manager=Manager(report_repository),
         )

@@ -79,7 +79,7 @@ class IXReportRepository(Protocol):
 
 
 @dataclass
-class StoreManager:
+class Manager:
     repo: IXReportRepository
 
     def _get_X_report_response(self, report: XReport) -> XReportResponse:
@@ -105,7 +105,6 @@ class StoreManager:
             )
         )
 
-        print(responses)
         return AllXReportResponse(responses)
 
     def make_X_report(self) -> None:
